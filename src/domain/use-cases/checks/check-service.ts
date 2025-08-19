@@ -29,7 +29,6 @@ export class CheckService implements CheckServiceUseCase {
       return false
     }
 
-    return Promise.resolve(true)
   }
 
 }
