@@ -4,3 +4,4 @@
 {"message":"Email not sent","level":"high","createdAt":"2025-08-23T03:10:08.535Z","origin":"email.service.ts"}
 {"message":"Email sent","level":"low","createdAt":"2025-08-23T03:10:33.918Z","origin":"email.service.ts"}
 {"message":"Error: Failed to send email","level":"high","createdAt":"2025-08-23T03:18:36.067Z","origin":"send-email-logs.ts"}
+{"message":"Service https://www.google.com working","level":"low","createdAt":"2025-08-24T02:42:40.384Z","origin":"check-service.ts"}
