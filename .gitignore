@@ -14,5 +14,7 @@ logs/
 .env
 
 mongo/
+mongo-test/
 postgres/
+postgres-test/
 /src/generated/prisma

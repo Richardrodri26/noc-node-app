@@ -1,67 +1,76 @@
 import nodemailer from 'nodemailer';
 import { envs } from '../../config/plugins/envs.plugin';
-import { LogRepository } from '../../domain/repository/log.repository';
-import { LogEntity, LogSeverityLevel } from '../../domain/entities/log.entity';
 
-interface SendMailOptions {
+export interface SendMailOptions {
   to: string | string[];
   subject: string;
   htmlBody: string;
-  attachments?: Attachment[]
+  attachements?: Attachement[];
 }
 
-interface Attachment {
+export interface Attachement {
   filename: string;
   path: string;
 }
 
+
 export class EmailService {
 
-  private transporter = nodemailer.createTransport({
+  private transporter = nodemailer.createTransport( {
     service: envs.MAILER_SERVICE,
     auth: {
       user: envs.MAILER_EMAIL,
-      pass: envs.MAILER_SECRET_KEY
+      pass: envs.MAILER_SECRET_KEY,
     }
   });
 
+  constructor() {}
 
-  constructor(
-  ) {}
 
-  async sendEmail(options: SendMailOptions): Promise<boolean> {
-    const { to, subject, htmlBody, attachments } = options;
+  async sendEmail( options: SendMailOptions ): Promise<boolean> {
+
+    const { to, subject, htmlBody, attachements = [] } = options;
+
+
     try {
-      const sentInformation = await this.transporter.sendMail({
-        // from: envs.MAILER_EMAIL,
-        to,
-        subject,
+
+      const sentInformation = await this.transporter.sendMail( {
+        to: to,
+        subject: subject,
         html: htmlBody,
-        attachments,
+        attachments: attachements,
       });
-      // console.log('sentInformation', sentInformation)
+
+      // console.log( sentInformation );
 
       return true;
-    } catch (error) {
-      return false; 
+    } catch ( error ) {
+      return false;
     }
+
   }
 
-  async sendEmailWithFileSystemLogs(to: string | string[]) {
+
+  async sendEmailWithFileSystemLogs( to: string | string[] ) {
     const subject = 'Logs del servidor';
     const htmlBody = `
-    <h1>Logs del servidor</h1>
-    <p>A continuación se muestran los logs del servidor:</p>
+    <h3>Logs de sistema - NOC</h3>
+    <p>Lorem velit non veniam ullamco ex eu laborum deserunt est amet elit nostrud sit. Dolore ullamco duis in ut deserunt. Ad pariatur labore exercitation adipisicing excepteur elit anim eu consectetur excepteur est dolor qui. Voluptate consectetur proident ex fugiat reprehenderit exercitation laboris amet Lorem ullamco sit. Id aute ad do laborum officia labore proident laborum. Amet sit aliqua esse anim fugiat ut eu excepteur veniam incididunt occaecat sit irure aliquip. Laborum esse cupidatat adipisicing non et cupidatat ut esse voluptate aute aliqua pariatur.</p>
+    <p>Ver logs adjuntos</p>
     `;
 
-    const attachments: Attachment[] = [
-      { filename: 'logs-all.log', path: '/logs/logs-all.log' },
-      { filename: 'logs-high.log', path: '/logs/logs-high.log' },
-      { filename: 'logs-medium.log', path: '/logs/logs-medium.log' },
+    const attachements:Attachement[] = [
+      { filename: 'logs-all.log', path: './logs/logs-all.log' },
+      { filename: 'logs-high.log', path: './logs/logs-high.log' },
+      { filename: 'logs-medium.log', path: './logs/logs-medium.log' },
     ];
 
-    return await this.sendEmail({ to, subject, htmlBody, attachments });
+    return this.sendEmail({
+      to, subject, attachements, htmlBody
+    });
+
   }
 
 
 }
+
